@@ -105,7 +105,7 @@ int main() {
     // Check if all the files are .txt files
     try {
         for (const auto& entry : fs::recursive_directory_iterator(folderPath)) {
-            if (entry.is_regular_file() && entry.path().extension() == ".txt") {
+            if (entry.is_regular_file() && (entry.path().extension() == ".c"||entry.path()==".cpp"||entry.path()==".txt")) {
                 processFile(entry.path(), outputFile);
             }
         }
