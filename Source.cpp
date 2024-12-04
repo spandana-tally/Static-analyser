@@ -33,7 +33,8 @@ std::map<std::string, std::set<std::string>> detectAPIs(const std::string& codeS
 
     std::map<std::string, std::set<std::string>> detectedAPIs = {
         {"Standard Libraries", {}},
-        {"OS-Specific APIs", {}}
+        {"OS-Specific APIs", {}},
+        {"Control statements", {}}
     };
 
     // Classify includes
@@ -54,6 +55,10 @@ std::map<std::string, std::set<std::string>> detectAPIs(const std::string& codeS
             func == "pthread_create" ||
             func == "pthread_join") {
             detectedAPIs["OS-Specific APIs"].insert(func);
+        }
+        else if (func == "if" || func == "else" || func == "for" || func == "switch" || func == "printf" || func == "scanf")
+        {
+            detectedAPIs["Control statements"].insert(func);
         }
         else {
             detectedAPIs["Standard Libraries"].insert(func);
@@ -92,36 +97,26 @@ int main() {
     std::string folderPath;
 
     // Specify the path of the folder
-    std::cout << "Enter the path to the folder containing .txt files with C/C++ code:" << std::endl;
+    std::cout << "Enter the path to the folder: " << std::endl;
     std::getline(std::cin, folderPath);
 
     // Open output file
-    std::ofstream outputFile("detected_apis.txt");
+    std::ofstream outputFile("detect.txt");
     if (!outputFile) {
         std::cerr << "Error: Could not open file for writing." << std::endl;
         return 1;
     }
 
-    // Check if all the files are .txt files
-    try {
-        for (const auto& entry : fs::recursive_directory_iterator(folderPath)) {
-            if (entry.is_regular_file() && (entry.path().extension() == ".c"||entry.path()==".cpp"||entry.path()==".txt")) {
-                processFile(entry.path(), outputFile);
-            }
+    for (const auto& entry : fs::recursive_directory_iterator(folderPath)) {
+        if (entry.is_regular_file() && (entry.path().extension() == ".c" || entry.path() == ".cpp" || entry.path() == ".txt")) {
+            processFile(entry.path(), outputFile);
         }
     }
-    catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-        return 1;
-    }
-
     outputFile.close();
-    std::cout << "Output has been written into detected_apis.txt." << std::endl;
-
+    std::cout << "Output has been written into detect.txt." << std::endl;
     // Use Clang to get and display the Clang version
     CXString version = clang_getClangVersion();
     std::cout << "Clang Version: " << clang_getCString(version) << std::endl;
     clang_disposeString(version);
-
     return 0;
 }
