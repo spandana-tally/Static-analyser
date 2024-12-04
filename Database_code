@@ -1,0 +1,108 @@
+<?php
+// Database connection
+$mysqli = new mysqli('localhost', 'root', '', 'api_tool');
+
+// Check connection
+if ($mysqli->connect_error) {
+    die('Connection failed: ' . $mysqli->connect_error);
+}
+
+// Function to insert API data into the table
+function insertApiData($mysqli, $filepath, $category, $api_name) {
+    $insertQuery = "INSERT INTO your_api_tool (filepath, category, api_name) VALUES (?, ?, ?)";
+    $stmt = $mysqli->prepare($insertQuery);
+    $stmt->bind_param("sss", $filepath, $category, $api_name);
+    
+    // Execute the insertion
+    if ($stmt->execute()) {
+        echo "API inserted: $api_name\n";
+    } else {
+        echo "Error inserting API: " . $stmt->error . "\n";
+    }
+
+    $stmt->close();
+}
+
+// Sample data (You can replace this with the actual logic of reading and processing files)
+$files = [
+    [
+        'filepath' => 'C:/path/to/file1.txt',
+        'api_detected' => [
+            'stdio.h' => 'Inbuilt API',
+            'stdlib.h' => 'Inbuilt API',
+            'unistd.h' => 'OS API'
+        ]
+    ],
+    [
+        'filepath' => 'C:/path/to/file2.txt',
+        'api_detected' => [
+            'windows.h' => 'Windows API',
+            'io.h' => 'Inbuilt API',
+            'sys/types.h' => 'OS API'
+        ]
+    ]
+];
+
+// Loop through the files and insert API data
+foreach ($files as $file) {
+    foreach ($file['api_detected'] as $api_name => $category) {
+        insertApiData($mysqli, $file['filepath'], $category, $api_name);
+    }
+}
+
+$mysqli->close();
+?>
+<?php
+// Database connection
+$mysqli = new mysqli('localhost', 'root', '', 'api_tool');
+
+// Check connection
+if ($mysqli->connect_error) {
+    die('Connection failed: ' . $mysqli->connect_error);
+}
+
+// Function to insert API data into the table
+function insertApiData($mysqli, $filepath, $category, $api_name) {
+    $insertQuery = "INSERT INTO your_api_tool (filepath, category, api_name) VALUES (?, ?, ?)";
+    $stmt = $mysqli->prepare($insertQuery);
+    $stmt->bind_param("sss", $filepath, $category, $api_name);
+    
+    // Execute the insertion
+    if ($stmt->execute()) {
+        echo "API inserted: $api_name\n";
+    } else {
+        echo "Error inserting API: " . $stmt->error . "\n";
+    }
+
+    $stmt->close();
+}
+
+// Sample data (You can replace this with the actual logic of reading and processing files)
+$files = [
+    [
+        'filepath' => 'C:/path/to/file1.txt',
+        'api_detected' => [
+            'stdio.h' => 'Inbuilt API',
+            'stdlib.h' => 'Inbuilt API',
+            'unistd.h' => 'OS API'
+        ]
+    ],
+    [
+        'filepath' => 'C:/path/to/file2.txt',
+        'api_detected' => [
+            'windows.h' => 'Windows API',
+            'io.h' => 'Inbuilt API',
+            'sys/types.h' => 'OS API'
+        ]
+    ]
+];
+
+// Loop through the files and insert API data
+foreach ($files as $file) {
+    foreach ($file['api_detected'] as $api_name => $category) {
+        insertApiData($mysqli, $file['filepath'], $category, $api_name);
+    }
+}
+
+$mysqli->close();
+?>
